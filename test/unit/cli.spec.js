@@ -12,7 +12,8 @@ describe('cli', () => {
 
   var fsMock = mocks.fs.create({
     cwd: {'karma.conf.js': true},
-    cwd2: {'karma.conf.coffee': true}
+    cwd2: {'karma.conf.coffee': true},
+    cwd3: {'karma.conf.ts': true}
   })
 
   var currentCwd = null
@@ -87,6 +88,13 @@ describe('cli', () => {
       expect(path.resolve(options.configFile)).to.equal(path.resolve('/cwd2/karma.conf.coffee'))
     })
 
+    it('should set default karma.conf.ts config file if exists', () => {
+      setCWD('/cwd3')
+      var options = processArgs(['--port', '10'])
+
+      expect(path.resolve(options.configFile)).to.equal(path.resolve('/cwd3/karma.conf.ts'))
+    })
+
     it('should not set default config if neither exists', () => {
       setCWD('/')
       var options = processArgs([])
@@ -123,6 +131,18 @@ describe('cli', () => {
 
       options = processArgs(['--log-level'])
       expect(mockery.process.exit).to.have.been.calledWith(1)
+    })
+
+    it('should parse format-error into a function', () => {
+      // root export
+      var options = processArgs(['--format-error', '../../test/unit/fixtures/format-error-root'])
+      var formatErrorRoot = require('../../test/unit/fixtures/format-error-root')
+      expect(options.formatError).to.equal(formatErrorRoot)
+
+      // property export
+      options = processArgs(['--format-error', '../../test/unit/fixtures/format-error-property'])
+      var formatErrorProperty = require('../../test/unit/fixtures/format-error-property').formatError
+      expect(options.formatError).to.equal(formatErrorProperty)
     })
 
     it('should parse browsers into an array', () => {

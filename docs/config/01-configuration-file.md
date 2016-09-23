@@ -12,8 +12,10 @@ Unless provided as argument, the Karma CLI will look for a configuration file at
 
 * `./karma.conf.js`
 * `./karma.conf.coffee`
+* `./karma.conf.ts`
 * `./.config/karma.conf.js`
 * `./.config/karma.conf.coffee`
+* `./.config/karma.conf.ts`
 
 in that order.
 
@@ -38,6 +40,17 @@ module.exports = (config) ->
     basePath: '../..'
     frameworks: ['jasmine']
     # ...
+```
+
+```typescript
+# karma.conf.ts
+module.exports = (config) => {
+  config.set({
+    basePath: '../..',
+    frameworks: ['jasmine'],
+    //...
+  });
+}
 ```
 
 ## File Patterns
@@ -575,6 +588,23 @@ Additional reporters, such as `growl`, `junit`, `teamcity` or `coverage` can be 
 Note: Just about all additional reporters in Karma (other than progress) require an additional library to be installed (via NPM).
 
 
+## formatError
+**Type:** Function
+
+**Default:** `undefined`
+
+**CLI:** `--format-error ./path/to/formatFunction.js`
+
+**Arguments:**
+  
+  * `msg` - The entire assertion error and stack trace as a string. 
+
+**Returns:** A new error message string.
+
+**Description:** Format assertion errors and stack traces.  Useful for removing vendors and compiled sources.
+
+The CLI option should be a path to a file that exports the format function.  This can be a function exported at the root of the module or an export named `formatError`.
+
 ## restartOnFileChange
 **Type:** Boolean
 
@@ -615,6 +645,44 @@ on whether all tests passed or any tests failed.
 **Description:** An array of allowed transport methods between the browser and testing server. This configuration setting
 is handed off to [socket.io](http://socket.io/) (which manages the communication
 between browsers and the testing server).
+
+
+## upstreamProxy
+**Type:** Object
+
+**Default:** `undefined`
+
+**Description:** For use when the Karma server needs to be run behind a proxy that changes the base url, etc
+
+If set then the following fields will be defined and can be overriden:
+
+### path
+**Type:** String
+
+**Default:** `'/'`
+
+**Description:** Will be prepended to the base url when launching browsers and prepended to internal urls as loaded by the browsers
+
+### port
+**Type:** Number
+
+**Default:** `9875`
+
+**Description:** Will be used as the port when launching browsers
+
+### hostname
+**Type:** String
+
+**Default:** `'localhost'`
+
+**Description:** Will be used as the hostname when launching browsers
+
+### protocol
+**Type:** String
+
+**Default:** `'http:'`
+
+**Description:** Will be used as the protocol when launching browsers
 
 
 ## urlRoot
