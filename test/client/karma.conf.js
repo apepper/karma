@@ -16,7 +16,7 @@ var launchers = {
   bs_safari: {
     base: 'BrowserStack',
     browser: 'safari',
-    browser_version: '9.0',
+    browser_version: '7.0',
     os_version: 'El Capitan',
     os: 'OS X'
   },
